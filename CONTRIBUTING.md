@@ -11,7 +11,7 @@ Be respectful, constructive, and professional in all interactions.
 ### Reporting Issues
 
 **Bug Reports**:
-- Check [existing issues](https://github.com/huxi965/zentao-ai-dev-workflow/issues) first
+- Check [existing issues](https://github.com/huxi965/zentao-automation-flow/issues) first
 - Use issue template (if available)
 - Include:
   - ZenTao version
@@ -72,8 +72,8 @@ Be respectful, constructive, and professional in all interactions.
 ### Local Setup
 ```bash
 # Clone your fork
-git clone https://github.com/huxi965/zentao-ai-dev-workflow.git
-cd zentao-ai-dev-workflow
+git clone https://github.com/huxi965/zentao-automation-flow.git
+cd zentao-automation-flow
 
 # Initialize submodule
 git submodule update --init --recursive
@@ -90,7 +90,7 @@ cd ../..
 #### Test Skill Instructions
 1. Copy skill to Claude Code's skills directory:
    ```bash
-   cp -r . ~/.claude/skills/zentao-ai-dev-workflow-dev
+   cp -r . ~/.claude/skills/zentao-automation-flow-dev
    ```
 
 2. In Claude Code, test the workflow:
@@ -191,7 +191,7 @@ Before submitting PR, verify:
 ## Questions?
 
 - Check [Troubleshooting](docs/troubleshooting.md)
-- Search [existing issues](https://github.com/huxi965/zentao-ai-dev-workflow/issues)
+- Search [existing issues](https://github.com/huxi965/zentao-automation-flow/issues)
 - Open a new issue with `question` label
 
 ## License

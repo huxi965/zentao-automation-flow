@@ -26,4 +26,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - zentao-cli (official ZenTao CLI) - for querying bug data
 - zentao-mcp v1.9.1+ (dyno-nexsoft) - for downloading attachments
 
-[1.0.0]: https://github.com/huxi965/zentao-ai-dev-workflow/releases/tag/v1.0.0
+[1.0.0]: https://github.com/huxi965/zentao-automation-flow/releases/tag/v1.0.0

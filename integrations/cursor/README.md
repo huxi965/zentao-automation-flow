@@ -24,7 +24,7 @@ cd zentao-mcp
 npm install
 
 # Copy download script
-cp /path/to/zentao-ai-dev-workflow/tools/downloadBugImages.ts scripts/
+cp /path/to/zentao-automation-flow/tools/downloadBugImages.ts scripts/
 ```
 
 ### 3. Configure Credentials

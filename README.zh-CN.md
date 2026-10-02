@@ -63,8 +63,8 @@ zentao my bugs
 
 ```bash
 cd ~/projects  # 或任意目录
-git clone https://github.com/huxi965/zentao-ai-dev-workflow.git
-cd zentao-ai-dev-workflow
+git clone https://github.com/huxi965/zentao-automation-flow.git
+cd zentao-automation-flow
 ```
 
 **步骤 3：安装截图下载器**
@@ -77,7 +77,7 @@ cd zentao-mcp
 npm install
 
 # 复制下载脚本
-cp ~/projects/zentao-ai-dev-workflow/tools/downloadBugImages.ts scripts/
+cp ~/projects/zentao-automation-flow/tools/downloadBugImages.ts scripts/
 ```
 
 **步骤 4：选择您的平台并完成平台专用配置**
@@ -205,8 +205,8 @@ MIT License - 详见 [LICENSE](LICENSE) 文件。
 
 ## 🌐 社区
 
-- 报告问题：[GitHub Issues](https://github.com/huxi965/zentao-ai-dev-workflow/issues)
-- 功能建议：[GitHub Discussions](https://github.com/huxi965/zentao-ai-dev-workflow/discussions)
+- 报告问题：[GitHub Issues](https://github.com/huxi965/zentao-automation-flow/issues)
+- 功能建议：[GitHub Discussions](https://github.com/huxi965/zentao-automation-flow/discussions)
 - 分享经验：在 Discussions 中添加您的使用案例！
 
 ---

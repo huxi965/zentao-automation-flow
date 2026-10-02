@@ -19,10 +19,10 @@ Copy the skill to Claude Code's skills directory:
 
 ```bash
 # Create skills directory if not exists
-mkdir -p ~/.claude/skills/zentao-ai-dev
+mkdir -p ~/.claude/skills/zentao-auto-workflow
 
 # Copy the skill file
-cp integrations/claude-code/SKILL.md ~/.claude/skills/zentao-ai-dev/
+cp integrations/claude-code/SKILL.md ~/.claude/skills/zentao-auto-workflow/
 
 # Copy download script to tools directory
 mkdir -p ~/.claude/tools/zentao-mcp/scripts

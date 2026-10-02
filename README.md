@@ -63,8 +63,8 @@ zentao my bugs
 
 ```bash
 cd ~/projects  # or any directory
-git clone https://github.com/huxi965/zentao-ai-dev-workflow.git
-cd zentao-ai-dev-workflow
+git clone https://github.com/huxi965/zentao-automation-flow.git
+cd zentao-automation-flow
 ```
 
 **Step 3: Install screenshot downloader**
@@ -77,7 +77,7 @@ cd zentao-mcp
 npm install
 
 # Copy download script
-cp ~/projects/zentao-ai-dev-workflow/tools/downloadBugImages.ts scripts/
+cp ~/projects/zentao-automation-flow/tools/downloadBugImages.ts scripts/
 ```
 
 **Step 4: Choose your platform and follow platform-specific setup**
@@ -205,8 +205,8 @@ Issues and PRs welcome! Please read our [Contributing Guide](CONTRIBUTING.md) fi
 
 ## 🌐 Community
 
-- Report bugs: [GitHub Issues](https://github.com/huxi965/zentao-ai-dev-workflow/issues)
-- Request features: [GitHub Discussions](https://github.com/huxi965/zentao-ai-dev-workflow/discussions)
+- Report bugs: [GitHub Issues](https://github.com/huxi965/zentao-automation-flow/issues)
+- Request features: [GitHub Discussions](https://github.com/huxi965/zentao-automation-flow/discussions)
 - Share your experience: Add your use case in discussions!
 
 ---

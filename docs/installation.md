@@ -70,8 +70,8 @@ zentao my bugs
 
 ```bash
 cd ~/projects  # or any directory you prefer
-git clone https://github.com/huxi965/zentao-ai-dev-workflow.git
-cd zentao-ai-dev-workflow
+git clone https://github.com/huxi965/zentao-automation-flow.git
+cd zentao-automation-flow
 ```
 
 ### 3. Install zentao-mcp (Screenshot Downloader)
@@ -88,13 +88,13 @@ npm install
 Copy the download script:
 
 ```bash
-cp ~/projects/zentao-ai-dev-workflow/tools/downloadBugImages.ts scripts/
+cp ~/projects/zentao-automation-flow/tools/downloadBugImages.ts scripts/
 ```
 
 Option B: Use git submodule (if the repository includes it):
 
 ```bash
-cd ~/projects/zentao-ai-dev-workflow
+cd ~/projects/zentao-automation-flow
 git submodule update --init --recursive
 cd tools/zentao-mcp
 npm install
@@ -169,9 +169,9 @@ After completing [Base Installation](#base-installation):
 ### 1. Copy Skill to Claude Code
 
 ```bash
-mkdir -p ~/.claude/skills/zentao-ai-dev
-cp ~/projects/zentao-ai-dev-workflow/integrations/claude-code/SKILL.md \
-   ~/.claude/skills/zentao-ai-dev/
+mkdir -p ~/.claude/skills/zentao-auto-workflow
+cp ~/projects/zentao-automation-flow/integrations/claude-code/SKILL.md \
+   ~/.claude/skills/zentao-auto-workflow/
 ```
 
 ### 2. Set Up Download Script Path
@@ -187,7 +187,7 @@ ln -s ~/tools/zentao-mcp ~/.claude/tools/zentao-mcp
 Or copy the download script directly:
 
 ```bash
-cp ~/projects/zentao-ai-dev-workflow/tools/downloadBugImages.ts \
+cp ~/projects/zentao-automation-flow/tools/downloadBugImages.ts \
    ~/.claude/tools/zentao-mcp/scripts/
 ```
 
@@ -199,7 +199,7 @@ In Claude Code, type:
 What skills do I have?
 ```
 
-You should see `zentao-ai-dev` in the list.
+You should see `zentao-auto-workflow` in the list.
 
 ### 4. Test the Workflow
 
@@ -217,13 +217,13 @@ After completing [Base Installation](#base-installation):
 
 ```bash
 cd /path/to/your-project
-cp ~/projects/zentao-ai-dev-workflow/integrations/cursor/.cursorrules .
+cp ~/projects/zentao-automation-flow/integrations/cursor/.cursorrules .
 ```
 
 Or append to existing rules:
 
 ```bash
-cat ~/projects/zentao-ai-dev-workflow/integrations/cursor/.cursorrules >> .cursorrules
+cat ~/projects/zentao-automation-flow/integrations/cursor/.cursorrules >> .cursorrules
 ```
 
 ### 2. Update Paths in .cursorrules
@@ -256,7 +256,7 @@ After completing [Base Installation](#base-installation):
 ### 1. Copy the Prompt Template
 
 ```bash
-cp ~/projects/zentao-ai-dev-workflow/integrations/prompt-template/zentao-dev-prompt.md \
+cp ~/projects/zentao-automation-flow/integrations/prompt-template/zentao-dev-prompt.md \
    ~/Documents/
 ```
 
@@ -345,7 +345,7 @@ node --version  # Should be >= 16
 **Error**: Skill not appearing in skill list
 
 **Solutions**:
-- Verify file is at: `~/.claude/skills/zentao-ai-dev/SKILL.md`
+- Verify file is at: `~/.claude/skills/zentao-auto-workflow/SKILL.md`
 - Check YAML frontmatter is valid (no syntax errors)
 - Restart Claude Code
 - Check Claude Code logs for errors
@@ -369,6 +369,6 @@ node --version  # Should be >= 16
 
 ## Getting Help
 
-- GitHub Issues: https://github.com/huxi965/zentao-ai-dev-workflow/issues
+- GitHub Issues: https://github.com/huxi965/zentao-automation-flow/issues
 - Documentation: See `docs/` directory
 - Examples: See `examples/` directory

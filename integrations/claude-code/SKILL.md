@@ -1,7 +1,7 @@
 ---
-name: zentao-ai-dev
-display_name: ZenTao AI Development Workflow
-display_name_zh: 禅道AI开发工作流
+name: zentao-auto-workflow
+display_name: ZenTao Automation Flow
+display_name_zh: 禅道自动化工作流
 description: Process ZenTao tasks (bugs, stories, tasks) — list → fetch details → download screenshots if present → analyze → report findings and plan → get approval → implement → test → commit. Use when the user asks to "process ZenTao tasks" or "develop from ZenTao."
 description_zh: 按顺序处理禅道(ZenTao)里的任务(Bug/需求/任务)——列出待办,逐个查看详情;有截图/附件的先下载分析,纯文字描述的直接分析描述;分析后先汇报内容和解决方案,获得批准后才改代码;改完交用户测试,确认后才 commit/push。当用户要求"处理禅道任务""开发禅道需求""修复禅道bug"时使用。
 license: MIT
@@ -11,7 +11,7 @@ metadata:
   depends_on: zentao-cli
 ---
 
-# ZenTao AI Development Workflow
+# ZenTao Automation Flow
 
 Standard workflow for processing ZenTao tasks (bugs, stories, tasks) with AI assistance: **list tasks → fetch details → analyze (with screenshots if present) → report findings → get approval → implement → test → commit**.
 
