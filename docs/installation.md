@@ -1,26 +1,41 @@
 # Installation Guide
 
-Complete setup instructions for the ZenTao Bug Fix Workflow.
+Complete setup instructions for ZenTao AI Development Workflow.
 
 ## Prerequisites
 
-### Required
+### Required Software
 
-- **Node.js 18+** — [Download](https://nodejs.org/)
+- **Node.js >= 16** — [Download](https://nodejs.org/)
+  - Verify: `node --version`
+  - Required for running the screenshot download script
 - **Git** — [Download](https://git-scm.com/)
-- **zentao-cli** — Official ZenTao CLI
-- **Claude Code** — [CLI](https://github.com/anthropics/claude-code), [Desktop](https://claude.ai/download), or [Web](https://claude.ai/code)
+  - Verify: `git --version`
+  - Required for version control
+- **zentao-cli** — Official ZenTao command-line tool
+  - Installation: `npm install -g zentao-cli`
+  - Verify: `zentao --version`
+  - Used for querying tasks and task details
 
-### ZenTao Access
+### ZenTao Server Requirements
 
-- Valid ZenTao account with bug access permissions
+- Valid ZenTao account with appropriate permissions (bug/story/task access)
 - ZenTao server version 18.0+ recommended (for REST API v1 support)
+- REST API v1 enabled on your ZenTao instance
 
-## Step-by-Step Installation
+### Choose Your Platform
+
+Pick one integration method:
+
+- **Claude Code** — AI-powered CLI/Desktop/Web app ([Installation](#claude-code-installation))
+- **Cursor** — AI-first code editor ([Installation](#cursor-installation))
+- **Other AI Tools** — Generic prompt template ([Installation](#generic-template-installation))
+
+## Base Installation
+
+These steps are required for all platforms:
 
 ### 1. Install zentao-cli
-
-Install the official ZenTao CLI globally:
 
 ```bash
 npm install -g zentao-cli
@@ -30,201 +45,330 @@ Verify installation:
 
 ```bash
 zentao --version
+# Should output: zentao-cli version X.X.X
 ```
 
-### 2. Clone This Repository
-
-Clone to Claude Code's skills directory:
-
-```bash
-cd ~/.claude/skills
-git clone https://github.com/<your-username>/zentao-bug-fix-workflow.git
-cd zentao-bug-fix-workflow
-```
-
-### 3. Initialize Submodules
-
-The attachment downloader is included as a git submodule:
-
-```bash
-git submodule update --init --recursive
-```
-
-### 4. Build the Attachment Downloader
-
-```bash
-cd tools/zentao-mcp
-npm install
-npm run build
-cd ../..
-```
-
-Verify build:
-
-```bash
-ls tools/zentao-mcp/build/
-# Should see: index.js zentaoClient.js formatters/ tools/ utils/
-```
-
-### 5. Configure zentao-cli Credentials
-
-Login interactively:
+Login to your ZenTao server:
 
 ```bash
 zentao login
 ```
 
-Follow prompts:
-- **ZenTao URL**: Your ZenTao server address (e.g., `https://zentao.example.com/zentao`)
+Follow the prompts:
+- **ZenTao URL**: Your server address (e.g., `https://zentao.example.com/zentao`)
 - **Account**: Your username
-- **Password or Token**: Your password (or API token if available)
+- **Password**: Your password or API token
 
-Verify login:
+Test the connection:
 
 ```bash
-zentao profile
+zentao my bugs
+# Should list your assigned bugs
 ```
 
-Should display your account and server info.
-
-### 6. Configure Attachment Downloader Credentials
-
-Create credentials file:
+### 2. Clone This Repository
 
 ```bash
+cd ~/projects  # or any directory you prefer
+git clone https://github.com/huxi965/zentao-ai-dev-workflow.git
+cd zentao-ai-dev-workflow
+```
+
+### 3. Install zentao-mcp (Screenshot Downloader)
+
+Option A: Clone separately (recommended):
+
+```bash
+cd ~/tools  # or another permanent location
+git clone https://github.com/dyno-nexsoft/zentao_mcp.git
+cd zentao-mcp
+npm install
+```
+
+Copy the download script:
+
+```bash
+cp ~/projects/zentao-ai-dev-workflow/tools/downloadBugImages.ts scripts/
+```
+
+Option B: Use git submodule (if the repository includes it):
+
+```bash
+cd ~/projects/zentao-ai-dev-workflow
+git submodule update --init --recursive
+cd tools/zentao-mcp
+npm install
+```
+
+### 4. Configure zentao-mcp Credentials
+
+The screenshot downloader needs separate credentials:
+
+```bash
+# For Claude Code
 mkdir -p ~/.claude/config
+nano ~/.claude/config/zentao-mcp.env
+
+# For Cursor or other tools
+mkdir -p ~/.config/zentao
+nano ~/.config/zentao/credentials.env
 ```
 
-Create `~/.claude/config/zentao-mcp.env`:
+Add your credentials (same format for both files):
 
-```bash
-ZENTAO_BASE_URL=https://your-zentao.com/zentao/api.php/v1
+```env
+ZENTAO_BASE_URL=https://your-zentao-server.com/zentao/api.php/v1
 ZENTAO_ACCOUNT=your-username
 ZENTAO_PASSWORD=your-password
 ZENTAO_ALLOW_INSECURE_SSL=false
 ```
 
-**Important Notes**:
-- `ZENTAO_BASE_URL` must end with `/api.php/v1` (REST API v1 endpoint)
-- Use the same account/password as zentao-cli
-- Set `ZENTAO_ALLOW_INSECURE_SSL=true` only if your ZenTao uses self-signed certificates
+**Important**: Replace with your actual values:
+- `ZENTAO_BASE_URL`: Must end with `/api.php/v1` (this is the REST API endpoint)
+- `ZENTAO_ACCOUNT`: Your ZenTao username
+- `ZENTAO_PASSWORD`: Your ZenTao password
+- `ZENTAO_ALLOW_INSECURE_SSL`: Set to `true` only for development servers with self-signed certificates
 
-Set secure permissions:
+Set proper permissions:
 
 ```bash
+# For Claude Code
 chmod 600 ~/.claude/config/zentao-mcp.env
+
+# For Cursor or other tools
+chmod 600 ~/.config/zentao/credentials.env
 ```
 
-### 7. Test the Setup
+### 5. Verify Installation
 
-#### Test zentao-cli
-
-List bugs in a project:
+Test zentao-cli:
 
 ```bash
-zentao bug --project=1 --pick=id,title,status --format=json
+zentao --version
+zentao my bugs
 ```
 
-(Replace `1` with an actual project ID from your ZenTao)
-
-#### Test Attachment Downloader
-
-Download a bug's screenshots:
+Test download script:
 
 ```bash
-cd ~/.claude/skills/zentao-bug-fix-workflow/tools/zentao-mcp
-npx tsx scripts/downloadBugImages.ts <bug-id> --out ./test-download
+cd ~/tools/zentao-mcp  # or wherever you installed it
+npx tsx scripts/downloadBugImages.ts --help
 ```
 
-(Replace `<bug-id>` with a bug that has screenshot attachments)
+Expected output:
+```
+Usage: downloadBugImages.ts <bugId1> [bugId2] [...] [--out <output-dir>]
 
-Check output:
+Downloads screenshots from ZenTao bug reports.
+```
+
+## Claude Code Installation
+
+After completing [Base Installation](#base-installation):
+
+### 1. Copy Skill to Claude Code
 
 ```bash
-ls -la test-download/#<bug-id>/
-# Should see: file-read-123.png file-read-456.png ...
-rm -rf test-download  # Clean up test
+mkdir -p ~/.claude/skills/zentao-ai-dev
+cp ~/projects/zentao-ai-dev-workflow/integrations/claude-code/SKILL.md \
+   ~/.claude/skills/zentao-ai-dev/
 ```
 
-## Verification Checklist
+### 2. Set Up Download Script Path
 
-- [ ] `zentao --version` shows version
-- [ ] `zentao profile` displays your account
-- [ ] `zentao bug --project=X` returns bug list
-- [ ] `~/.claude/config/zentao-mcp.env` exists with correct credentials
-- [ ] `~/.claude/config/zentao-mcp.env` has `600` permissions
-- [ ] Test screenshot download succeeded
+Ensure zentao-mcp is at the expected location:
+
+```bash
+mkdir -p ~/.claude/tools/zentao-mcp
+# If you installed zentao-mcp elsewhere, create a symlink:
+ln -s ~/tools/zentao-mcp ~/.claude/tools/zentao-mcp
+```
+
+Or copy the download script directly:
+
+```bash
+cp ~/projects/zentao-ai-dev-workflow/tools/downloadBugImages.ts \
+   ~/.claude/tools/zentao-mcp/scripts/
+```
+
+### 3. Verify Skill Installation
+
+In Claude Code, type:
+
+```
+What skills do I have?
+```
+
+You should see `zentao-ai-dev` in the list.
+
+### 4. Test the Workflow
+
+```
+Process ZenTao bugs from project 5
+```
+
+See [Usage Guide](../integrations/claude-code/README.md#usage) for detailed usage.
+
+## Cursor Installation
+
+After completing [Base Installation](#base-installation):
+
+### 1. Copy Rules to Your Project
+
+```bash
+cd /path/to/your-project
+cp ~/projects/zentao-ai-dev-workflow/integrations/cursor/.cursorrules .
+```
+
+Or append to existing rules:
+
+```bash
+cat ~/projects/zentao-ai-dev-workflow/integrations/cursor/.cursorrules >> .cursorrules
+```
+
+### 2. Update Paths in .cursorrules
+
+Edit `.cursorrules` and update these variables:
+
+```bash
+ZENTAO_MCP_PATH="$HOME/tools/zentao-mcp"  # Match your installation path
+ZENTAO_CREDENTIALS="$HOME/.config/zentao/credentials.env"
+```
+
+### 3. Restart Cursor
+
+Close and reopen Cursor to load the new rules.
+
+### 4. Test the Workflow
+
+In Cursor's AI chat:
+
+```
+Process ZenTao bugs from project 5
+```
+
+See [Usage Guide](../integrations/cursor/README.md#usage) for detailed usage.
+
+## Generic Template Installation
+
+After completing [Base Installation](#base-installation):
+
+### 1. Copy the Prompt Template
+
+```bash
+cp ~/projects/zentao-ai-dev-workflow/integrations/prompt-template/zentao-dev-prompt.md \
+   ~/Documents/
+```
+
+### 2. Customize Paths
+
+Edit the copied file and update:
+
+```
+ZENTAO_MCP_PATH="$HOME/tools/zentao-mcp"
+ZENTAO_CREDENTIALS="$HOME/.config/zentao/credentials.env"
+PROJECT_FRONTEND="src/"  # Your project structure
+PROJECT_BACKEND="api/"   # Your project structure
+```
+
+### 3. Use with Your AI Tool
+
+**GitHub Copilot:**
+- Create `.github/copilot-instructions.md` in your project
+- Paste the prompt template content
+
+**ChatGPT / Claude Web:**
+- Copy the prompt template
+- Paste at the start of your conversation
+- Then ask: "Process ZenTao bug #123"
+
+See [Usage Guide](../integrations/prompt-template/README.md#usage) for tool-specific instructions.
+
+## Environment Variables Reference
+
+### zentao-cli Configuration
+
+Stored in: `~/.zentaorc` (automatically created by `zentao login`)
+
+Contains:
+- ZenTao server URL
+- Session token
+- User preferences
+
+### zentao-mcp Credentials
+
+**Claude Code**: `~/.claude/config/zentao-mcp.env`
+**Others**: `~/.config/zentao/credentials.env`
+
+Required variables:
+```env
+ZENTAO_BASE_URL=https://zentao.example.com/zentao/api.php/v1
+ZENTAO_ACCOUNT=username
+ZENTAO_PASSWORD=password
+ZENTAO_ALLOW_INSECURE_SSL=false
+```
 
 ## Troubleshooting
 
-### zentao-cli: Command not found
+### zentao-cli login fails
 
-**Solution**: Ensure `npm` global bin directory is in your PATH:
-
-```bash
-npm config get prefix
-# Add <prefix>/bin to your PATH
-```
-
-### zentao login: E1005 Config file not writable
-
-**Solution**: Check directory permissions:
-
-```bash
-mkdir -p ~/.config/zentao
-chmod 755 ~/.config/zentao
-```
-
-### Screenshot download: Login failed
-
-**Causes**:
-1. Wrong credentials in `~/.claude/config/zentao-mcp.env`
-2. Wrong `ZENTAO_BASE_URL` (must be REST API v1 endpoint)
-3. ZenTao server doesn't support REST API v1
+**Error**: "Connection refused" or "Invalid credentials"
 
 **Solutions**:
-1. Double-check credentials match zentao-cli login
-2. Verify URL format: `https://<server>/zentao/api.php/v1`
-3. Check ZenTao version (18.0+ recommended)
+- Verify server URL is correct (should end with `/zentao`, not `/zentao/api.php/v1`)
+- Check your username and password
+- Ensure your account has API access permissions
+- Try accessing ZenTao web UI to confirm credentials
 
-### Screenshot download: 0-byte files
+### Screenshot download fails
 
-**Cause**: File IDs extracted from bug description don't match actual attachments
+**Error**: "Login failed" or "401 Unauthorized"
 
-**Solution**: Check bug's `steps` field for actual `file-read-N.png` references:
+**Solutions**:
+- Check credentials file exists and has correct permissions (600)
+- Verify `ZENTAO_BASE_URL` ends with `/api.php/v1`
+- Confirm account has file download permissions
+- Test API access: `curl -u username:password https://zentao.example.com/zentao/api.php/v1/bugs/1`
 
+### Node.js version mismatch
+
+**Error**: "Unsupported Node.js version"
+
+**Solution**:
 ```bash
-zentao bug <id> --format=json | grep file-read
+node --version  # Should be >= 16
+# If older, download latest from nodejs.org
 ```
 
-## Alternative Installation: Without Submodules
+### Skill not loading (Claude Code)
 
-If you prefer not to use git submodules:
+**Error**: Skill not appearing in skill list
 
-```bash
-cd ~/.claude/skills/zentao-bug-fix-workflow/tools
-git clone https://github.com/dyno-nexsoft/zentao_mcp.git
-cd zentao_mcp
-npm install
-npm run build
-```
+**Solutions**:
+- Verify file is at: `~/.claude/skills/zentao-ai-dev/SKILL.md`
+- Check YAML frontmatter is valid (no syntax errors)
+- Restart Claude Code
+- Check Claude Code logs for errors
 
-The rest of the setup remains the same.
+### Cursor rules not working
+
+**Error**: AI doesn't follow workflow
+
+**Solutions**:
+- Ensure `.cursorrules` is in project root
+- Restart Cursor after adding/updating rules
+- Use explicit trigger phrases: "Follow ZenTao workflow to fix bug #123"
+- Check for conflicting rules in parent directories
 
 ## Next Steps
 
-- Read [Workflow Details](workflow.md) to understand how the skill works
-- Try processing a bug: In Claude Code, say "Process ZenTao bugs assigned to me"
-- Check [Troubleshooting](troubleshooting.md) if you encounter issues
+- [Workflow Guide](workflow.md) - Understand the development workflow
+- [Usage Examples](../examples/bug-with-screenshots.md) - See real-world usage
+- [Troubleshooting Guide](troubleshooting.md) - Common issues and solutions
+- [Architecture](architecture.md) - Design decisions and technical details
 
-## Uninstallation
+## Getting Help
 
-To remove the skill:
-
-```bash
-cd ~/.claude/skills
-rm -rf zentao-bug-fix-workflow
-rm ~/.claude/config/zentao-mcp.env  # Optional: remove credentials
-```
-
-To keep zentao-cli for other uses, leave it installed globally.
+- GitHub Issues: https://github.com/huxi965/zentao-ai-dev-workflow/issues
+- Documentation: See `docs/` directory
+- Examples: See `examples/` directory

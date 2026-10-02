@@ -337,7 +337,7 @@ npx tsx scripts/downloadBugImages.ts 42 43 44 45 --out ./batch-download
 
 ### Report Issues
 
-- **This workflow**: [GitHub Issues](https://github.com/<your-username>/zentao-bug-fix-workflow/issues)
+- **This workflow**: [GitHub Issues](https://github.com/huxi965/zentao-ai-dev-workflow/issues)
 - **zentao-cli**: [Official repo](https://github.com/easysoft/zentao-cli/issues)
 - **zentao_mcp**: [Third-party repo](https://github.com/dyno-nexsoft/zentao_mcp/issues)
 - **Claude Code**: [Support page](https://support.anthropic.com/)
@@ -360,7 +360,7 @@ zentao profile
 zentao bug --project=<id> --pick=id,title,status --format=json
 
 # Test screenshot download
-cd ~/.claude/skills/zentao-bug-fix-workflow/tools/zentao-mcp
+cd ~/.claude/skills/zentao-ai-dev-workflow/tools/zentao-mcp
 npx tsx scripts/downloadBugImages.ts <bug-id> --out ./test
 
 # Verify credentials

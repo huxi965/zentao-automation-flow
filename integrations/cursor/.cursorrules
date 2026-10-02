@@ -1,0 +1,129 @@
+# ZenTao AI Development Workflow - Cursor Rules
+
+# Configuration
+ZENTAO_MCP_PATH="$HOME/.local/share/zentao-mcp"
+ZENTAO_CREDENTIALS="$HOME/.config/zentao/credentials.env"
+
+# Trigger Patterns
+# Activate when user says:
+# - "Process ZenTao bugs/tasks/stories"
+# - "Fix ZenTao bug #N"
+# - "Develop ZenTao story #N"
+# - "Handle ZenTao task #N"
+
+# Core Workflow Rules
+
+## 1. List Tasks
+When user asks to process ZenTao tasks:
+- Ask for project ID if not provided
+- Run appropriate command:
+  ```bash
+  zentao bug --project=<id> --pick=id,title,status,assignedTo --format=json
+  zentao story --project=<id> --pick=id,title,status,assignedTo --format=json
+  zentao task --project=<id> --pick=id,name,status,assignedTo --format=json
+  ```
+- Show list to user and confirm which to process
+
+## 2. Fetch Details
+For each confirmed task:
+```bash
+zentao bug <id> --format=json
+zentao story <id> --format=json
+zentao task <id> --format=json
+```
+
+Inspect the `steps` or description field:
+- **Clear text description**: skip to analysis
+- **Empty/placeholder/contains `file-read-N.png`**: download screenshots
+
+## 3. Download Screenshots (if needed)
+```bash
+cd $ZENTAO_MCP_PATH
+source $ZENTAO_CREDENTIALS
+npx tsx scripts/downloadBugImages.ts <taskId> --out ./zentao-images
+```
+
+Use Read tool to view downloaded images in `zentao-images/#<taskId>/`
+
+## 4. Analyze and Report (MANDATORY GATE)
+**BEFORE writing ANY code**, report to user:
+- Task objective (in your own words)
+- Root cause (bugs) or implementation approach (features)
+- Proposed solution with affected files
+- Alternative approaches if applicable
+
+**WAIT for explicit approval**. Do not proceed until user says "approve", "go ahead", or similar confirmation.
+
+## 5. Implement Changes
+After approval:
+- Only change approved scope
+- Don't touch unrelated uncommitted changes
+- Run type check/lint:
+  ```bash
+  npx tsc --noEmit
+  npx eslint <modified-files>
+  ```
+- Report validation results
+
+## 6. User Testing and Commit
+After implementation:
+- Tell user to test locally
+- **DO NOT auto-commit**
+- Wait for user confirmation
+- When user confirms, commit with format:
+  ```
+  禅道Bug #<id>: <title>
+
+  禅道 Bug #<id>: <zentao-url>
+  ```
+- Use `git add <specific-files>`, never `git add .` or `git add -A`
+
+# Rules
+
+## MUST DO
+- Always report findings before coding
+- Always wait for explicit approval
+- Always let user test before committing
+- Never auto-commit or auto-push
+- Never modify ZenTao task status (user does this manually)
+
+## MUST NOT DO
+- Skip the approval gate
+- Commit without user confirmation
+- Use `git add .` or `git add -A`
+- Modify unrelated files
+- Make destructive git operations (force push, reset --hard)
+
+## Screenshot Download Logic
+Only download when:
+- Description is empty
+- Description says "see attachment" or similar
+- `steps` field contains `file-read-N.png` references
+
+Skip download when:
+- Text description is clear and complete
+
+## Error Handling
+- Login fails → check credentials at `$ZENTAO_CREDENTIALS`
+- Download fails → verify `steps` field actually has image references
+- Validation fails → fix errors before showing to user
+
+# Integration Notes
+- This workflow works for bugs, stories, and tasks
+- Adapt file paths to actual project structure
+- Frontend typically in `src/`, backend varies by project
+- For UI bugs: locate component; for data bugs: trace to backend source
+
+# Example Session
+
+User: "Fix ZenTao bug #42"
+
+AI:
+1. Fetches bug #42 details
+2. Downloads screenshots if present
+3. Reports: "Bug #42 is about export feature failing with 'missing metadata' error. Root cause: merged collections missing collection_type field in collectionOperations.ts:67. Propose adding collection_type field inherited from source. Approve?"
+4. [Waits for user approval]
+5. After approval: implements fix
+6. Runs validation
+7. Tells user to test
+8. After user confirms: commits with proper message
